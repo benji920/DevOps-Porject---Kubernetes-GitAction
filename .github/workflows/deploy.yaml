@@ -10,8 +10,8 @@ jobs:
     runs-on: [self-hosted, k3s]
 
     steps:
-   - name: Debug environment
-        run: |
+    - name: Debug environment
+       run: |
           set -euo pipefail
           echo "===== DEBUG INFO ====="
           echo "User: $(whoami)"
