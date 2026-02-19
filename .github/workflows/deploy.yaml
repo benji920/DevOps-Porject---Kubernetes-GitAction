@@ -17,6 +17,10 @@ jobs:
       uses: azure/setup-kubectl@v4
       with:
         version: v1.29.0
+    - name: SAST scan
+      run: |
+        set -e
+        docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep --config=auto /src
 
     - name: Configure kubeconfig
       run: |
