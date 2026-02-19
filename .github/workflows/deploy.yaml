@@ -10,8 +10,8 @@ jobs:
     runs-on: [self-hosted, k3s]
 
     steps:
-    - name: Debug environment
-       run: |
+      - name: Debug environment
+        run: |
           set -euo pipefail
           echo "===== DEBUG INFO ====="
           echo "User: $(whoami)"
@@ -21,25 +21,25 @@ jobs:
           ls -la
           echo "======================"
 
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v4
-      with:
-        version: v1.29.0
-    - name: SAST scan
-      run: |
-        set -euo pipefail
-        set -x
-        docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep --config=auto /src
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.29.0
+      - name: SAST scan
+        run: |
+          set -euo pipefail
+          set -x
+          docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep --config=auto /src
 
-    - name: Configure kubeconfig
-      run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > ~/.kube/config
-        chmod 600 ~/.kube/config
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
 
-    - name: Deploy Kubernetes manifests
-      run: |
-        kubectl apply -f .
+      - name: Deploy Kubernetes manifests
+        run: |
+          kubectl apply -f .
