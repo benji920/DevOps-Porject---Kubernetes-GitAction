@@ -10,6 +10,17 @@ jobs:
     runs-on: [self-hosted, k3s]
 
     steps:
+   - name: Debug environment
+        run: |
+          set -euo pipefail
+          echo "===== DEBUG INFO ====="
+          echo "User: $(whoami)"
+          echo "Working directory: $(pwd)"
+          echo "Workspace: $GITHUB_WORKSPACE"
+          echo "Files:"
+          ls -la
+          echo "======================"
+
     - name: Checkout repo
       uses: actions/checkout@v4
 
@@ -19,7 +30,8 @@ jobs:
         version: v1.29.0
     - name: SAST scan
       run: |
-        set -e
+        set -euo pipefail
+        set -x
         docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep --config=auto /src
 
     - name: Configure kubeconfig
